@@ -31,8 +31,8 @@ func normalize(_ asciiValues: (Int, Int)) -> (Int, Int) {
 }
 
 func score(
-	signs: [Int],
-	outcomes: [Int],
+	signs: [Int] = [1, 2, 3], // rock, paper, scissors
+	outcomes: [Int] = [0, 3, 6], // loss, draw, win
 	rules: @escaping (Int, Int) -> (Int, Int)
 ) -> ((Int, Int) -> Int) {
 	return {
@@ -43,36 +43,27 @@ func score(
 	}
 }
 
-let signs = [1, 2, 3],
-		outcomes = [0, 3, 6]
-
 let normalizedInput = input
 	.split(separator: "\n")
 	.map(asciiize)
 	.map(normalize)
 
-// MARK: Part One
+let partOneRules: (Int, Int) -> (Int, Int) = { left, right in
+	(right, right - left)
+}
+
 let partOne = normalizedInput
-	.map(
-		score(
-			signs: signs,
-			outcomes: outcomes,
-			rules: { ($1, $1 - $0) }
-		)
-	)
+	.map(score(rules: partOneRules))
 	.reduce(0, +)
 
 print("Part One", partOne)
 
-// MARK: Part Two
+let partTwoRules: (Int, Int) -> (Int, Int) = { left, right in
+	(left + right, right)
+}
+
 let partTwo = normalizedInput
-	.map(
-		score(
-			signs: signs,
-			outcomes: outcomes,
-			rules: { ($0 + $1, $1) }
-		)
-	)
+	.map(score(rules: partTwoRules))
 	.reduce(0, +)
 
 print("Part Two", partTwo)
