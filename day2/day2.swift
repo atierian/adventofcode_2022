@@ -1,5 +1,6 @@
 import Foundation
 
+// MARK: Setup
 let input: String
 do {
 	input = try String(
